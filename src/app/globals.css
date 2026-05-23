@@ -1,0 +1,291 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ *
+ * Design tokens — dark editorial palette
+ * A near-black stage, warm cream type, and a single vivid red accent.
+ * ------------------------------------------------------------------ */
+@theme {
+  --color-base: #0e0b0c;
+  --color-surface: #16110f;
+  --color-surface-2: #211a18;
+  --color-cream: #f4ede2;
+  --color-muted: #9c9089;
+  --color-faint: #6c625e;
+  --color-brand: #d81f2e;
+  --color-brand-bright: #ef2c39;
+  --color-line: #2d2522;
+
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-marquee: marquee 42s linear infinite;
+  --animate-marquee-right: marquee 42s linear infinite reverse;
+  --animate-vertical-marquee: vertical-marquee 38s linear infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 4.5s ease-in-out infinite;
+  --animate-ecg: ecg 3.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  --animate-shimmer: shimmer 2.6s linear infinite;
+  --animate-drift: drift 18s ease-in-out infinite;
+  --animate-spin-slow: spin 28s linear infinite;
+}
+
+/* next/font injects these CSS variables onto <html>. */
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-playfair);
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes vertical-marquee {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+/* Vertical word carousel — five words per slot. Each word holds in
+ * place, then quickly slides up to the next. The sixth keyframe
+ * lands on a duplicate of the first word so the loop is seamless. */
+@keyframes word-flip {
+  0%,
+  16% {
+    transform: translateY(0);
+  }
+  20%,
+  36% {
+    transform: translateY(-100%);
+  }
+  40%,
+  56% {
+    transform: translateY(-200%);
+  }
+  60%,
+  76% {
+    transform: translateY(-300%);
+  }
+  80%,
+  96% {
+    transform: translateY(-400%);
+  }
+  100% {
+    transform: translateY(-500%);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  33% {
+    transform: translate3d(-4%, 2%, 0);
+  }
+  66% {
+    transform: translate3d(3%, -3%, 0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes ecg {
+  0% {
+    stroke-dashoffset: 320;
+  }
+  55% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -320;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes details-open {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Base
+ * ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-base font-sans text-cream antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-brand);
+    color: var(--color-cream);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Scroll reveal
+ * The hidden starting state is gated behind `.js` on <html>, set by an
+ * inline script in the root layout. Without JavaScript the class is
+ * never added, so revealed content simply renders visible.
+ * ------------------------------------------------------------------ */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition:
+    opacity 0.8s var(--ease-expo),
+    transform 0.8s var(--ease-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.js .reveal[data-direction="left"] {
+  transform: translateX(-2rem);
+}
+.js .reveal[data-direction="right"] {
+  transform: translateX(2rem);
+}
+.js .reveal[data-direction="scale"] {
+  transform: scale(0.94);
+}
+.js .reveal[data-direction="fade"] {
+  transform: none;
+}
+
+.js .reveal[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Card lift — shared hover treatment for bordered cards
+ * Subtle lift, brand-tinted border, and a soft red shadow.
+ * ------------------------------------------------------------------ */
+.card-lift {
+  transition:
+    transform 0.45s var(--ease-expo),
+    border-color 0.3s var(--ease-expo),
+    box-shadow 0.4s var(--ease-expo),
+    background-color 0.3s var(--ease-expo);
+  will-change: transform;
+}
+
+.card-lift:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--color-brand) 50%, transparent);
+  box-shadow: 0 18px 44px -22px
+    color-mix(in srgb, var(--color-brand) 60%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-lift {
+    transition: border-color 0.2s ease;
+  }
+  .card-lift:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Native <details> open animation
+ * Only animates on open — close remains instant (cross-browser safe).
+ * ------------------------------------------------------------------ */
+details[open] > *:not(summary) {
+  animation: details-open 320ms var(--ease-expo);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  details[open] > *:not(summary) {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Heartbeat trace — animated ECG path
+ * ------------------------------------------------------------------ */
+.heartbeat-path {
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  animation: var(--animate-ecg);
+}
+
+/* ------------------------------------------------------------------ *
+ * Marquee track — used by the vertical marquee. Animation is set
+ * via inline style so each column can vary its duration/direction;
+ * this class only provides the reduced-motion override.
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heartbeat-path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}

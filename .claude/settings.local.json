@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npm install clsx tailwind-merge)",
+      "PowerShell(Get-PSDrive -PSProvider FileSystem | Select-Object Name, @{N='UsedGB';E={[math]::Round\\($_.Used/1GB,2\\)}}, @{N='FreeGB';E={[math]::Round\\($_.Free/1GB,2\\)}} | Format-Table -AutoSize)",
+      "PowerShell(npm install clsx tailwind-merge 2>&1 | Tee-Object -FilePath F:\\\\ClientWebsite-node_modules\\\\..\\\\install-log.txt; \"EXITCODE=$LASTEXITCODE\")",
+      "Bash(cd \"c:/Users/total/Downloads/ClientWebsite\" && find node_modules/next/dist/docs -type f | sort)",
+      "Read(//f/ClientWebsite-node_modules/next/dist/docs/**)",
+      "PowerShell(npm run build 2>&1 | Tee-Object -FilePath C:\\\\Users\\\\total\\\\Downloads\\\\ClientWebsite\\\\build-log.txt; \"EXITCODE=$LASTEXITCODE\")",
+      "PowerShell(npm run dev)",
+      "PowerShell(taskkill /PID 6100 /F 2>&1)",
+      "PowerShell(\"done\")",
+      "PowerShell(\"cleaned\")",
+      "Bash(npm run *)",
+      "WebSearch"
+    ]
+  }
+}

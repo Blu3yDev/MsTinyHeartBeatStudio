@@ -20,11 +20,11 @@
   --animate-marquee: marquee 42s linear infinite;
   --animate-marquee-right: marquee 42s linear infinite reverse;
   --animate-vertical-marquee: vertical-marquee 38s linear infinite;
-  --animate-float: float 7s ease-in-out infinite;
-  --animate-pulse-glow: pulse-glow 4.5s ease-in-out infinite;
+  --animate-float: float 10s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 7s ease-in-out infinite;
   --animate-ecg: ecg 3.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
   --animate-shimmer: shimmer 2.6s linear infinite;
-  --animate-drift: drift 18s ease-in-out infinite;
+  --animate-drift: drift 26s ease-in-out infinite;
   --animate-spin-slow: spin 28s linear infinite;
 }
 
@@ -100,19 +100,19 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-12px);
+    transform: translateY(-7px);
   }
 }
 
 @keyframes pulse-glow {
   0%,
   100% {
-    opacity: 0.55;
+    opacity: 0.7;
     transform: scale(1);
   }
   50% {
     opacity: 1;
-    transform: scale(1.08);
+    transform: scale(1.04);
   }
 }
 
@@ -167,13 +167,41 @@
 
   :focus-visible {
     outline: 2px solid var(--color-brand);
-    outline-offset: 3px;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-brand) 18%, transparent);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Route transition
+ * `template.tsx` re-mounts this wrapper on every navigation, so the
+ * enter animation replays each time the route changes. A gentle rise
+ * and fade reads as a confident page change without sliding the layout.
+ * ------------------------------------------------------------------ */
+.route-transition {
+  animation: route-enter 0.5s var(--ease-expo) both;
+}
+
+@keyframes route-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-transition {
+    animation: none;
   }
 }
 

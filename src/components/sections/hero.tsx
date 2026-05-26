@@ -2,7 +2,6 @@ import Image from "next/image";
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
 import { CountUp } from "@/components/ui/count-up";
-import { CursorGlow } from "@/components/ui/cursor-glow";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { HeartbeatLine } from "@/components/ui/heartbeat-line";
 import { Reveal } from "@/components/ui/reveal";
@@ -22,16 +21,13 @@ export function Hero() {
         {siteConfig.wordmark}
       </span>
 
-      {/* Warm red glow — drifts slowly while gently breathing. */}
+      {/* A single warm red glow that drifts slowly behind the type. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-40 -right-40 animate-drift"
       >
-        <div className="h-[42rem] w-[42rem] animate-pulse-glow rounded-full bg-brand/12 blur-[150px]" />
+        <div className="h-[42rem] w-[42rem] rounded-full bg-brand/12 blur-[150px]" />
       </div>
-
-      {/* Cursor-following light, restricted to the hero. */}
-      <CursorGlow size={420} opacity={0.18} />
 
       <Container className="relative">
         <div className="pt-20 pb-20 md:pt-28 md:pb-28">
@@ -92,7 +88,7 @@ export function Hero() {
             <div className="relative">
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute -inset-6 animate-pulse-glow rounded-full bg-brand/18 blur-[90px]"
+                className="pointer-events-none absolute -inset-6 rounded-full bg-brand/14 blur-[90px]"
               />
               <Image
                 src={tutuGroup.src}

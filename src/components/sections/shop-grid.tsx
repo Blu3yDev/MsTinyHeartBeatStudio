@@ -17,8 +17,8 @@ export function ShopGrid({ tone = "base" }: { tone?: "base" | "surface" }) {
         ))}
       </div>
       <p className="mt-8 text-center text-xs text-faint">
-        This is a placeholder catalogue — the studio&apos;s real products,
-        prices, and photos will appear here.
+        This is a placeholder catalogue — products added in the studio admin
+        panel will replace it.
       </p>
     </Section>
   );

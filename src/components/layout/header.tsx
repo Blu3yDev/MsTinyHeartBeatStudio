@@ -44,8 +44,9 @@ export function Header() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-base/90 backdrop-blur-md">
-      <Container className="flex h-20 items-center justify-between gap-6">
+    <>
+      <header className="sticky top-0 z-50 border-b border-line bg-base/90 backdrop-blur-md">
+        <Container className="flex h-20 items-center justify-between gap-6">
         <Logo />
 
         <nav className="hidden items-center gap-7 lg:flex">
@@ -97,19 +98,25 @@ export function Header() {
             <MenuIcon open={open} />
           </button>
         </div>
-      </Container>
+        </Container>
+      </header>
 
-      {/* Mobile menu — fills the viewport below the header bar. */}
+      {/* Mobile menu — rendered as a sibling of <header> (not a child) so
+          the header's `backdrop-blur` doesn't become its containing block
+          and cap its height. Fixed positioning then fills the viewport. */}
       <div
         id="mobile-menu"
         className={cn(
-          "fixed inset-x-0 top-20 bottom-0 z-40 flex flex-col overflow-y-auto bg-base px-6 pt-8 pb-10 transition-all duration-300 ease-expo lg:hidden",
+          "fixed inset-x-0 top-20 bottom-0 z-40 flex flex-col overflow-y-auto bg-base px-6 pt-6 pb-10 transition-all duration-300 ease-expo lg:hidden",
           open
             ? "visible translate-y-0 opacity-100"
             : "invisible -translate-y-3 opacity-0",
         )}
       >
-        <nav className="flex flex-col">
+        <p className="mb-2 text-[0.6rem] font-semibold uppercase tracking-[0.22em] text-faint">
+          Menu
+        </p>
+        <nav className="flex flex-col border-t border-line/60">
           {navLinks.map((link, index) => {
             const active = pathname === link.href;
             return (
@@ -118,21 +125,45 @@ export function Header() {
                 href={link.href}
                 aria-current={active ? "page" : undefined}
                 onClick={() => setOpen(false)}
+                style={{
+                  transitionDelay: open ? `${120 + index * 45}ms` : "0ms",
+                }}
                 className={cn(
-                  "flex items-baseline gap-4 border-b border-line py-4 font-display text-3xl font-medium tracking-tight transition-colors",
+                  "group flex items-center gap-4 border-b border-line/60 py-3.5 transition-[color,transform,opacity] duration-300 ease-expo",
+                  open
+                    ? "translate-x-0 opacity-100"
+                    : "translate-x-3 opacity-0",
                   active ? "text-brand" : "text-cream hover:text-brand",
                 )}
               >
-                <span className="font-sans text-xs font-medium text-faint">
+                <span
+                  className={cn(
+                    "w-6 font-sans text-[0.7rem] font-semibold tabular-nums transition-colors",
+                    active ? "text-brand" : "text-faint group-hover:text-brand",
+                  )}
+                >
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                {link.label}
+                <span className="font-display text-[1.65rem] font-medium leading-none tracking-tight">
+                  {link.label}
+                </span>
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "ml-auto text-lg transition-all duration-300 ease-expo",
+                    active
+                      ? "translate-x-0 opacity-100"
+                      : "-translate-x-1.5 opacity-0 group-hover:translate-x-0 group-hover:opacity-100",
+                  )}
+                >
+                  &rarr;
+                </span>
               </Link>
             );
           })}
         </nav>
 
-        <div className="mt-auto flex flex-col gap-4 pt-10">
+        <div className="mt-auto flex flex-col gap-4 pt-8">
           <Button
             href="/register"
             variant="solid"
@@ -150,7 +181,7 @@ export function Header() {
           </a>
         </div>
       </div>
-    </header>
+    </>
   );
 }
 

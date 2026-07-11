@@ -3,6 +3,7 @@ import { Geist, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { HideOnAdmin } from "@/components/layout/hide-on-admin";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
 import { siteConfig } from "@/content/site";
 
@@ -73,12 +74,16 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <ScrollProgress />
-        <Header />
+        <HideOnAdmin>
+          <ScrollProgress />
+          <Header />
+        </HideOnAdmin>
         <main id="main" className="flex-1">
           {children}
         </main>
-        <Footer />
+        <HideOnAdmin>
+          <Footer />
+        </HideOnAdmin>
       </body>
     </html>
   );

@@ -4,9 +4,11 @@ import { Section, SectionHeading } from "@/components/layout/section";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/ui/reveal";
 import { EventsGrid } from "@/components/sections/events-grid";
+import { MediaGallery } from "@/components/sections/media-gallery";
 import { ClosingCta } from "@/components/sections/closing-cta";
 import { campActivities, showcaseThemes } from "@/content/events";
 import { achievements, kidsRedDresses, preschoolArt } from "@/content/images";
+import { getCollection } from "@/lib/media";
 import { pageMeta } from "@/lib/metadata";
 
 export const metadata = pageMeta(
@@ -14,7 +16,13 @@ export const metadata = pageMeta(
   "Showcases, theatre productions, holiday camps, and WADF-sanctioned competitions with Heartbeat Latin & Ballroom Dance Studio in Seychelles.",
 );
 
-export default function EventsPage() {
+// Rendered per request so owner uploads appear immediately, without a rebuild.
+export const dynamic = "force-dynamic";
+
+export default async function EventsPage() {
+  // Owner-managed photos and videos from recent events, if any.
+  const highlights = await getCollection("events");
+
   return (
     <>
       <PageHeader
@@ -101,6 +109,17 @@ export default function EventsPage() {
           </Reveal>
         </div>
       </Section>
+
+      <MediaGallery
+        items={highlights}
+        tone="base"
+        heading={{
+          eyebrow: "Highlights",
+          title: "Recent events",
+          intro:
+            "Photos and clips from our latest showcases, competitions, and camps.",
+        }}
+      />
 
       <ClosingCta />
     </>
